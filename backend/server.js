@@ -31,6 +31,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
 
+app.get("/", (req, res) => res.json({ message: "Sri Enippagam API is running" }));
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 app.use("/api/products", productRoutes);

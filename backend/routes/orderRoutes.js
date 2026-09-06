@@ -6,6 +6,8 @@ import {
   getCustomerOrderById,
   createOrder,
   updateOrderStatus,
+  updatePaymentStatus,
+  bulkUpdateOrderStatus,
 } from "../controllers/orderController.js";
 import { protectAdmin, protectCustomer } from "../middleware/auth.js";
 
@@ -26,5 +28,7 @@ router.route("/customer/:id").get(protectCustomer, getCustomerOrderById);
 router.route("/:id").get(protectAdmin, getOrderById);
 
 router.route("/:id/status").patch(protectAdmin, updateOrderStatus);
+router.route("/:id/payment-status").patch(protectAdmin, updatePaymentStatus);
+router.route("/bulk-status").patch(protectAdmin, bulkUpdateOrderStatus);
 
 export default router;

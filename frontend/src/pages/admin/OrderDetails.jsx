@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+<<<<<<< HEAD
 import { getOrder, updateOrderStatus } from "../../services/api.js";
 import { downloadReceipt } from "../../utils/receipt.js";
+=======
+import { getOrder, updateOrderStatus, updatePaymentStatus } from "../../services/api.js";
+>>>>>>> 5b937b7 (feat : Enhance order management with filtering, pagination, and bulk updates; add payment status updates and order summary)
 import Loader from "../../components/common/Loader.jsx";
 
 const statuses = [
   "Pending",
   "Confirmed",
-  "Preparing",
+  "Processing",
+  "Shipped",
   "Out for Delivery",
   "Delivered",
   "Cancelled",
+  "Returned",
+  "Refunded",
 ];
+const paymentStatuses = ["Pending", "Paid", "Failed", "Refunded"];
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -57,6 +65,12 @@ export default function OrderDetails() {
     }
   };
 
+  const handlePaymentChange = async (e) => {
+    try { setUpdating(true); await updatePaymentStatus(id, e.target.value); await load(); }
+    catch (err) { setError(err.response?.data?.message || "Failed to update payment status."); }
+    finally { setUpdating(false); }
+  };
+
   if (loading) {
     return <Loader label="Loading order..." />;
   }
@@ -78,7 +92,11 @@ export default function OrderDetails() {
       <div className="admin-page">
         <Link className="admin-back-link" to="/admin/orders"><i className="bi bi-arrow-left"></i> Back to Orders</Link>
 
+<<<<<<< HEAD
       <div className="admin-detail-heading"><div><p className="admin-eyebrow">Order #{order._id.slice(0, 8)}</p><h2 className="admin-section-title">Order details</h2></div><div className="admin-detail-actions"><button className="admin-secondary-btn" onClick={() => downloadReceipt(order)}><i className="bi bi-download"></i> Download receipt</button><span className={`status-badge status-${order.status.replace(/\s/g, "-").toLowerCase()}`}>{order.status}</span></div></div>
+=======
+      <div className="admin-detail-heading"><div><p className="admin-eyebrow">Order #{order._id.slice(0, 8)}</p><h2 className="admin-section-title">Order details</h2></div><div className="admin-detail-actions"><button className="btn btn-secondary" onClick={() => window.print()}><i className="bi bi-printer"></i> Print / Reprint</button><span className={`status-badge status-${order.status.replace(/\s/g, "-").toLowerCase()}`}>{order.status}</span></div></div>
+>>>>>>> 5b937b7 (feat : Enhance order management with filtering, pagination, and bulk updates; add payment status updates and order summary)
 
       <div className="admin-order-details">
         <div className="order-info-block">
@@ -94,9 +112,7 @@ export default function OrderDetails() {
           <h4><i className="bi bi-credit-card"></i> Payment</h4>
           <strong>{order.paymentMethod === "RAZORPAY" ? "Online payment" : "Cash on delivery"}</strong>
           <p>
-            Status: <span className={`status-badge status-${(order.paymentStatus || "Pending").toLowerCase()}`}>
-              {order.paymentStatus || "Pending"}
-            </span>
+            Status: <select value={order.paymentStatus || "Pending"} onChange={handlePaymentChange} disabled={updating}>{paymentStatuses.map((status) => <option key={status}>{status}</option>)}</select>
           </p>
           {order.razorpayPaymentId && <p>Payment ID: {order.razorpayPaymentId}</p>}
         </div>
@@ -143,8 +159,9 @@ export default function OrderDetails() {
       </table></div>
 
       <p className="admin-order-total">
-        Total: ₹{order.totalAmount}
+        Subtotal: ₹{order.subtotal ?? order.items.reduce((sum, item) => sum + item.price * item.quantity, 0)} · Delivery: ₹{order.deliveryCharge || 0} · Tax: ₹{order.tax || 0} · Discount: ₹{order.discount || 0}<br /><strong>Total: ₹{order.totalAmount}</strong>
       </p>
+      <section className="admin-timeline"><div className="admin-subheading"><h3>Order timeline</h3><span>{order.statusHistory?.length || 0} updates</span></div>{(order.statusHistory || []).slice().reverse().map((event, index) => <div className="admin-timeline-item" key={`${event.changedAt}-${index}`}><span className="admin-timeline-dot"></span><div><strong>{event.status}</strong><small>{new Date(event.changedAt).toLocaleString()}</small></div></div>)}</section>
     </div>
   );
 }

@@ -13,7 +13,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     Promise.all([getProducts(), getOrders(), getContacts()])
-      .then(([products, orders, contacts]) => {
+      .then(([products, orderResult, contacts]) => {
+        const orders = orderResult.orders || orderResult;
         const pending = orders.filter(
           (o) => o.status === "Pending"
         ).length;
