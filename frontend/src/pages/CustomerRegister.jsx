@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./CustomerAuth.css";
+import { registerCustomer } from "../services/api.js";
 
 export default function CustomerRegister() {
   const navigate = useNavigate();
@@ -29,29 +30,14 @@ export default function CustomerRegister() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/customer/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Registration failed");
-      }
+      const data = await registerCustomer(form);
 
       localStorage.setItem("customerToken", data.token);
       localStorage.setItem("customer", JSON.stringify(data.customer));
 
       navigate("/");
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || error.message || "Registration failed");
     } finally {
       setLoading(false);
     }

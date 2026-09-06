@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./CustomerAuth.css";
+import { loginCustomer } from "../services/api.js";
 
 export default function CustomerLogin() {
   const navigate = useNavigate();
@@ -27,29 +28,14 @@ export default function CustomerLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/customer/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
+      const data = await loginCustomer(form);
 
       localStorage.setItem("customerToken", data.token);
       localStorage.setItem("customer", JSON.stringify(data.customer));
 
       navigate("/");
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || error.message || "Login failed");
     } finally {
       setLoading(false);
     }

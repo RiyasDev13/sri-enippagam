@@ -8,6 +8,15 @@ const api = axios.create({ baseURL });
 export const getAdminProfile = () =>
   api.get("/auth/admin/profile").then((res) => res.data);
 
+export const loginAdmin = (data) =>
+  api.post("/auth/admin/login", data).then((res) => res.data);
+
+export const loginCustomer = (data) =>
+  api.post("/auth/customer/login", data).then((res) => res.data);
+
+export const registerCustomer = (data) =>
+  api.post("/auth/customer/register", data).then((res) => res.data);
+
 // Automatically attach the admin JWT when available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("adminToken");
