@@ -1,0 +1,69 @@
+.contact-hero-section {
+  padding: 84px 0 92px;
+  background: #fff;
+}
+
+.contact-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  align-items: center;
+  gap: clamp(45px, 8vw, 120px);
+}
+
+.contact-welcome { max-width: 490px; }
+.contact-eyebrow { margin: 0 0 13px; color: var(--color-primary); font: 600 0.73rem "Poppins", sans-serif; letter-spacing: 0.15em; text-transform: uppercase; }
+.contact-welcome h2 { margin: 0 0 22px; color: var(--color-dark); font: 500 clamp(2.2rem, 4vw, 3.7rem)/1.12 "Poppins", sans-serif; }
+.contact-welcome-text { max-width: 440px; margin: 0; color: var(--color-text); font-size: 1rem; line-height: 1.85; }
+.contact-detail-list { display: grid; gap: 16px; margin-top: 35px; }
+.contact-detail-list a { display: flex; align-items: center; gap: 13px; color: var(--color-dark); }
+.contact-detail-list a:hover strong { color: var(--color-primary); }
+.contact-detail-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: var(--color-bg-light); color: var(--color-primary); }
+.contact-detail-list small, .contact-detail-list strong { display: block; }
+.contact-detail-list small { margin-bottom: 3px; color: #777; font-size: 0.72rem; }
+.contact-detail-list strong { font: 600 0.88rem "Poppins", sans-serif; transition: color 0.2s ease; }
+
+.contact-form-card { max-width: none; margin: 0; padding: 34px 38px 38px; border: 1px solid rgba(25, 119, 204, 0.12); border-radius: 5px; background: #fff; box-shadow: var(--shadow); }
+.contact-form-heading { margin-bottom: 22px; }
+.contact-form-heading .contact-eyebrow { margin-bottom: 8px; }
+.contact-form-heading h3 { margin: 0 0 6px; color: var(--color-dark); font: 500 1.65rem "Poppins", sans-serif; }
+.contact-form-heading > p:last-child { margin: 0; color: var(--color-text); font-size: 0.86rem; }
+.contact-form { gap: 4px; }
+.contact-form label { margin-top: 13px; color: var(--color-dark); font: 600 0.75rem "Poppins", sans-serif; }
+.contact-form label span { color: var(--color-primary); }
+.contact-form input, .contact-form textarea { padding: 13px 14px; border: 2px solid #444; border-radius: 5px; background: #fff; color: var(--color-dark); font-size: 0.86rem; transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+.contact-form input::placeholder, .contact-form textarea::placeholder { color: #999; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--color-primary); background: #fff; box-shadow: 0 0 0 3px rgba(25, 119, 204, 0.1); }
+.contact-form textarea { min-height: 128px; resize: vertical; }
+.contact-submit-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; align-self: flex-start; margin-top: 24px; padding: 13px 24px; border: 0; border-radius: 40px; background: var(--color-primary); color: #fff; font: 600 0.76rem "Poppins", sans-serif; letter-spacing: 0.06em; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease; }
+.contact-submit-button:hover { background: var(--color-accent); color: var(--color-dark); transform: translateY(-2px); }
+.success-state { padding: 30px 0; color: #3b805d; font-size: 0.95rem; }
+
+.contact-locations-section { padding: 78px 0 92px; background: var(--color-bg-light); }
+.contact-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 30px; }
+.contact-section-heading h3 { margin: 0; color: var(--color-dark); font: 500 2rem "Poppins", sans-serif; }
+.contact-section-heading > p { max-width: 300px; margin: 0 0 3px; color: var(--color-text); font-size: 0.88rem; line-height: 1.7; text-align: right; }
+.map-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.map-card { overflow: hidden; border: 1px solid rgba(25, 119, 204, 0.12); border-radius: 5px; background: #fff; box-shadow: var(--shadow); }
+.map-card-heading { display: flex; align-items: center; gap: 13px; padding: 20px 22px; }
+.map-number { color: var(--color-primary); font: 600 0.75rem "Poppins", sans-serif; letter-spacing: 0.08em; }
+.map-card h4 { margin: 0 0 3px; padding: 0; color: var(--color-dark); font: 600 1rem "Poppins", sans-serif; }
+.map-card-heading p { margin: 0; color: var(--color-text); font-size: 0.78rem; }
+.map-card iframe { display: block; width: 100%; height: 315px; border: 0; filter: saturate(0.75) contrast(0.95); }
+
+@media (max-width: 850px) {
+  .contact-hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .contact-welcome { max-width: 650px; }
+  .contact-section-heading { align-items: start; flex-direction: column; gap: 12px; }
+  .contact-section-heading > p { text-align: left; }
+}
+
+@media (max-width: 600px) {
+  .contact-hero-section { padding: 52px 0 62px; }
+  .contact-welcome h2 { font-size: 2.2rem; }
+  .contact-form-card { padding: 26px 20px 28px; }
+  .contact-form .form-row, .map-grid { grid-template-columns: 1fr; }
+  .contact-submit-button { width: 100%; }
+  .contact-locations-section { padding: 58px 0 68px; }
+  .contact-section-heading h3 { font-size: 1.7rem; }
+  .map-card iframe { height: 270px; }
+}
