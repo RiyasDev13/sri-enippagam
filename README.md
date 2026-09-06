@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sri Enippagam — React E-commerce Site
 
 A React conversion of the original Sri Enippagam HTML site, extended into a working
@@ -129,3 +130,69 @@ contained to those two files.
 products so the storefront isn't empty on first run. Add, edit, or delete products
 from the Admin dashboard — since the store is in-memory, this data resets whenever
 the backend server restarts (until you connect MongoDB).
+=======
+sri-enippagam/
+└── frontend/
+    ├── public/
+    │   └── logo.png
+    │
+    └── src/
+        ├── App.jsx
+        ├── main.jsx
+        │
+        ├── assets/
+        │   └── logo.png
+        │
+        ├── components/
+        │   ├── admin/
+        │   │   ├── AdminLayout.jsx
+        │   │   ├── AdminSidebar.jsx
+        │   │   └── ProtectedRoute.jsx
+        │   ├── cart/
+        │   │   └── CartItem.jsx
+        │   ├── common/
+        │   │   ├── Loader.jsx
+        │   │   ├── SectionTitle.jsx
+        │   │   └── SubBanner.jsx
+        │   ├── layout/
+        │   │   ├── Footer.jsx
+        │   │   ├── Layout.jsx
+        │   │   ├── Navbar.jsx
+        │   │   └── TopBar.jsx
+        │   └── product/
+        │       ├── ProductCard.jsx
+        │       └── ProductGrid.jsx
+        │
+        ├── context/
+        │   └── CartContext.jsx
+        │
+        ├── pages/
+        │   ├── About.jsx
+        │   ├── Account.jsx
+        │   ├── Cart.jsx
+        │   ├── Checkout.jsx
+        │   ├── Contact.jsx
+        │   ├── CustomerLogin.jsx
+        │   ├── CustomerRegister.jsx
+        │   ├── Home.jsx
+        │   ├── NotFound.jsx
+        │   ├── OrderSuccess.jsx
+        │   ├── ProductCategory.jsx
+        │   ├── ProductDetails.jsx
+        │   │
+        │   └── admin/
+        │       ├── AdminLogin.jsx
+        │       ├── ContactsList.jsx
+        │       ├── Dashboard.jsx
+        │       ├── OrderDetails.jsx
+        │       ├── OrdersList.jsx
+        │       ├── ProductForm.jsx
+        │       └── ProductsList.jsx
+        │
+        ├── services/
+        │   └── api.js
+        │
+        └── styles/
+            ├── admin.css
+            └── main.css
+>>>>>>> 18a364a2100f73282a9a6a5a56db69e5292dcc5c
