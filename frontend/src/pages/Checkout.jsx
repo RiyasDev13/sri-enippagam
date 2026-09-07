@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import {
   createOrder,
   createPaymentOrder,
   verifyPayment,
+  getCustomerProfile,
+  saveCustomerDetails,
 } from "../services/api.js";
 import SubBanner from "../components/common/SubBanner.jsx";
 
@@ -23,6 +25,10 @@ export default function Checkout() {
   const [error, setError] = useState(null);
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [savedDetails, setSavedDetails] = useState([]);
+  const [selectedDetailsId, setSelectedDetailsId] = useState("");
+  const [saveDetails, setSaveDetails] = useState(false);
+  const [detailsMessage, setDetailsMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -32,11 +38,42 @@ export default function Checkout() {
   // Final amount including delivery
   const finalAmount = Number(totalAmount) + deliveryCharge;
 
+  useEffect(() => {
+    if (!localStorage.getItem("customerToken")) return;
+    getCustomerProfile()
+      .then(({ customer }) => {
+        const details = customer?.savedDetails || [];
+        setSavedDetails(details);
+        if (details.length) {
+          setSelectedDetailsId(String(details[0]._id));
+          setForm(details[0]);
+        } else {
+          setForm((current) => ({
+            ...current,
+            name: current.name || customer?.name || "",
+            email: current.email || customer?.email || "",
+            phone: current.phone || customer?.phone || "",
+          }));
+        }
+      })
+      .catch(() => setDetailsMessage("Could not load your saved details."));
+  }, []);
+
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleSavedDetailsChange = (e) => {
+    const detail = savedDetails.find((item) => item._id === e.target.value);
+    setSelectedDetailsId(e.target.value);
+    if (detail) {
+      setForm({ name: detail.name, email: detail.email, phone: detail.phone, address: detail.address });
+    } else {
+      setForm({ name: "", email: "", phone: "", address: "" });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -46,6 +83,13 @@ export default function Checkout() {
   setError(null);
 
   try {
+    if (saveDetails) {
+      const result = await saveCustomerDetails(form);
+      setSavedDetails(result.savedDetails || []);
+      setSaveDetails(false);
+      setDetailsMessage("Details saved for your next checkout.");
+    }
+
     // =========================
     // CASH ON DELIVERY
     // =========================
@@ -206,6 +250,17 @@ export default function Checkout() {
           <form className="checkout-form" onSubmit={handleSubmit}>
             <h4>Your Details</h4>
 
+            {savedDetails.length > 0 && (
+              <div className="saved-details-picker">
+                <label htmlFor="saved-details">Use saved details</label>
+                <select id="saved-details" value={selectedDetailsId} onChange={handleSavedDetailsChange}>
+                  <option value="">Enter new checkout details</option>
+                  {savedDetails.map((detail, index) => <option key={detail._id} value={detail._id}>{index + 1}. {detail.name} - {detail.phone}</option>)}
+                </select>
+                <small>{savedDetails.length}/5 saved details</small>
+              </div>
+            )}
+
             <label>Full Name *</label>
 
             <input
@@ -243,6 +298,11 @@ export default function Checkout() {
               onChange={handleChange}
               required
             />
+
+            {localStorage.getItem("customerToken") && savedDetails.length < 5 && (
+              <label className="save-details-option"><input type="checkbox" checked={saveDetails} onChange={(e) => setSaveDetails(e.target.checked)} /> Save these details for next time</label>
+            )}
+            {detailsMessage && <p className="checkout-details-message">{detailsMessage}</p>}
 
             {/* =========================
                 PAYMENT METHOD

@@ -28,7 +28,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 // @desc    Create a new product
 // @route   POST /api/products
 export const createProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, category, image, available } = req.body;
+  const { name, description, price, category, image, available, stock } = req.body;
 
   if (!name || price === undefined || !category) {
     res.status(400);
@@ -45,6 +45,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     description: description || "",
     price: Number(price),
     category,
+    stock: stock === undefined ? 100 : Number(stock),
     image: imageUrl,
     available:
       available === undefined
@@ -65,12 +66,13 @@ export const updateProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 
-  const { name, description, price, category, available } = req.body;
+  const { name, description, price, category, available, stock } = req.body;
 
   product.name = name ?? product.name;
   product.description = description ?? product.description;
   product.price = price !== undefined ? Number(price) : product.price;
   product.category = category ?? product.category;
+  if (stock !== undefined) product.stock = Number(stock);
 
   if (available !== undefined) {
     product.available = available === true || available === "true";

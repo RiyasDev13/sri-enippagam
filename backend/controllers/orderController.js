@@ -1,6 +1,23 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import Order from "../models/Order.js";
 import razorpay from "../services/razorpayService.js";
+import Product from "../models/Product.js";
+import Contact from "../models/Contact.js";
+
+const startOfDay = (date) => {
+  const value = new Date(date);
+  value.setHours(0, 0, 0, 0);
+  return value;
+};
+
+const getRangeStart = (range, customFrom) => {
+  const today = startOfDay(new Date());
+  if (range === "today") return today;
+  if (range === "7d") return new Date(today.getTime() - 6 * 86400000);
+  if (range === "30d") return new Date(today.getTime() - 29 * 86400000);
+  if (range === "month") return new Date(today.getFullYear(), today.getMonth(), 1);
+  return customFrom ? startOfDay(customFrom) : new Date(today.getTime() - 6 * 86400000);
+};
 
 
 // @desc    Get all orders
@@ -245,4 +262,68 @@ export const bulkUpdateOrderStatus = asyncHandler(async (req, res) => {
     return order.save();
   }));
   res.json({ updated: orders.length, orders });
+});
+
+export const getDashboardSummary = asyncHandler(async (req, res) => {
+  const { range = "7d", from = "", to = "" } = req.query;
+  const rangeStart = getRangeStart(range, from);
+  const rangeEnd = to ? new Date(`${to}T23:59:59.999`) : new Date();
+  const [orders, products, contacts] = await Promise.all([
+    Order.find().sort({ createdAt: -1 }).lean(),
+    Product.find().lean(),
+    Contact.find().sort({ createdAt: -1 }).lean(),
+  ]);
+
+  const paidOrders = orders.filter((order) => order.paymentStatus === "Paid");
+  const revenueBetween = (start, end) => paidOrders
+    .filter((order) => new Date(order.createdAt) >= start && new Date(order.createdAt) <= end)
+    .reduce((sum, order) => sum + Number(order.totalAmount || 0), 0);
+  const rangeOrders = orders.filter((order) => new Date(order.createdAt) >= rangeStart && new Date(order.createdAt) <= rangeEnd);
+  const orderStats = orders.reduce((stats, order) => {
+    stats.total += 1;
+    if (stats[order.status] !== undefined) stats[order.status] += 1;
+    return stats;
+  }, { total: 0, Pending: 0, Processing: 0, Delivered: 0, Cancelled: 0 });
+  const enquirySummary = contacts.reduce((summary, contact) => {
+    summary.total += 1;
+    if (contact.status === "New") summary.unread += 1;
+    if (contact.status === "Replied") summary.replied += 1;
+    if (contact.status === "Resolved") summary.resolved += 1;
+    return summary;
+  }, { total: 0, unread: 0, replied: 0, resolved: 0 });
+  const productSales = new Map();
+  orders.forEach((order) => (order.items || []).forEach((item) => {
+    const current = productSales.get(item.productId) || { productId: item.productId, name: item.name, quantity: 0, revenue: 0 };
+    current.quantity += Number(item.quantity || 0);
+    current.revenue += Number(item.price || 0) * Number(item.quantity || 0);
+    productSales.set(item.productId, current);
+  }));
+  const chartDays = range === "today"
+    ? 1
+    : range === "7d"
+      ? 7
+      : range === "30d"
+        ? 30
+        : Math.min(Math.max(Math.floor((startOfDay(rangeEnd) - startOfDay(rangeStart)) / 86400000) + 1, 1), 31);
+  const chart = Array.from({ length: chartDays }, (_, index) => {
+    const date = new Date(rangeStart.getTime() + index * 86400000);
+    const next = new Date(date.getTime() + 86400000);
+    return {
+      label: date.toLocaleDateString("en-IN", { day: "numeric", month: "short" }),
+      orders: rangeOrders.filter((order) => new Date(order.createdAt) >= date && new Date(order.createdAt) < next).length,
+      revenue: revenueBetween(date, next),
+    };
+  });
+  const lowStock = products.filter((product) => product.available === false || (product.stock !== undefined && product.stock <= 10)).slice(0, 8);
+  res.json({
+    range: { from: rangeStart, to: rangeEnd },
+    revenue: { today: revenueBetween(startOfDay(new Date()), new Date()), sevenDays: revenueBetween(getRangeStart("7d"), new Date()), thirtyDays: revenueBetween(getRangeStart("30d"), new Date()), total: paidOrders.reduce((sum, order) => sum + Number(order.totalAmount || 0), 0), codPending: orders.filter((order) => order.paymentMethod === "COD" && order.paymentStatus === "Pending").reduce((sum, order) => sum + Number(order.totalAmount || 0), 0) },
+    orderStats,
+    chart,
+    attention: { pendingOrders: orders.filter((order) => order.status === "Pending").slice(0, 6), codPending: orders.filter((order) => order.paymentMethod === "COD" && order.paymentStatus === "Pending").slice(0, 6), lowStock, unreadEnquiries: contacts.filter((contact) => contact.status === "New").slice(0, 6) },
+    lowStock,
+    topProducts: [...productSales.values()].sort((a, b) => b.quantity - a.quantity).slice(0, 6),
+    enquirySummary,
+    recentOrders: orders.slice(0, 6),
+  });
 });

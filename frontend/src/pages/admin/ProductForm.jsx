@@ -14,6 +14,7 @@ const emptyForm = {
   category: "sweets",
   image: "",
   available: true,
+  stock: 100,
 };
 
 export default function ProductForm() {
@@ -45,6 +46,7 @@ export default function ProductForm() {
           category: product.category || "sweets",
           image: product.image || "",
           available: product.available ?? true,
+          stock: product.stock ?? 100,
         });
 
         setPreview(product.image || "");
@@ -93,6 +95,7 @@ export default function ProductForm() {
       payload.append("price", String(Number(form.price)));
       payload.append("category", form.category);
       payload.append("available", String(form.available));
+      payload.append("stock", String(Number(form.stock)));
 
       if (imageFile) {
         payload.append("image", imageFile);
@@ -211,6 +214,17 @@ export default function ProductForm() {
                 <option value="namkeens">Namkeens</option>
                 <option value="other">Other</option>
               </select>
+            </label>
+
+            <label>
+              Stock quantity
+              <input
+                type="number"
+                name="stock"
+                min="0"
+                value={form.stock}
+                onChange={handleChange}
+              />
             </label>
 
             <div className="form-full">

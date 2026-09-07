@@ -59,6 +59,51 @@
   filter: none;
 }
 
+.site-wrapper[data-theme="bw"] .section-title,
+.site-wrapper[data-theme="bw"] .trust-item-text,
+.site-wrapper[data-theme="bw"] .checkout-form label,
+.site-wrapper[data-theme="bw"] .checkout-form h4,
+.site-wrapper[data-theme="bw"] .checkout-form input,
+.site-wrapper[data-theme="bw"] .checkout-form textarea,
+.site-wrapper[data-theme="bw"] .checkout-form select,
+.site-wrapper[data-theme="bw"] .account-page h1,
+.site-wrapper[data-theme="bw"] .account-page h2,
+.site-wrapper[data-theme="bw"] .account-page strong {
+  color: var(--text-primary);
+}
+
+.site-wrapper[data-theme="bw"] .checkout-form input,
+.site-wrapper[data-theme="bw"] .checkout-form textarea,
+.site-wrapper[data-theme="bw"] .checkout-form select,
+.site-wrapper[data-theme="bw"] .contact-form input,
+.site-wrapper[data-theme="bw"] .contact-form textarea {
+  border-color: var(--border-color);
+  background: var(--card);
+  color: var(--text-primary);
+}
+
+.site-wrapper[data-theme="bw"] .checkout-form input::placeholder,
+.site-wrapper[data-theme="bw"] .checkout-form textarea::placeholder,
+.site-wrapper[data-theme="bw"] .contact-form input::placeholder,
+.site-wrapper[data-theme="bw"] .contact-form textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+.site-wrapper[data-theme="bw"] .why-section,
+.site-wrapper[data-theme="bw"] .products-section,
+.site-wrapper[data-theme="bw"] .contact-hero-section,
+.site-wrapper[data-theme="bw"] .map-card,
+.site-wrapper[data-theme="bw"] .contact-form-card {
+  background: var(--card);
+}
+
+.site-wrapper[data-theme="bw"] .hero-badge,
+.site-wrapper[data-theme="bw"] .why-icon-badge,
+.site-wrapper[data-theme="bw"] .trust-item-icon {
+  background: var(--card);
+  color: var(--text-primary);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -2348,3 +2393,44 @@ img {
     transform: rotate(360deg);
   }
 }
+
+.saved-details-picker {
+  display: grid;
+  gap: 7px;
+  margin: 0 0 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background-default);
+}
+
+.saved-details-picker label,
+.save-details-option {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.saved-details-picker select {
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--card);
+  color: var(--text-primary);
+}
+
+.saved-details-picker small,
+.checkout-details-message {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.save-details-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  font-size: 0.8rem;
+}
+
+.checkout-details-message { margin: 0; }
