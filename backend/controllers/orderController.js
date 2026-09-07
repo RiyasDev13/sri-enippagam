@@ -1,6 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import Order from "../models/Order.js";
 import razorpay from "../services/razorpayService.js";
+<<<<<<< ours
 import Product from "../models/Product.js";
 import Contact from "../models/Contact.js";
 
@@ -18,6 +19,13 @@ const getRangeStart = (range, customFrom) => {
   if (range === "month") return new Date(today.getFullYear(), today.getMonth(), 1);
   return customFrom ? startOfDay(customFrom) : new Date(today.getTime() - 6 * 86400000);
 };
+=======
+import {
+  sendAdminNewOrderMessage,
+  sendOrderPlacedMessage,
+  sendOrderStatusMessage,
+} from "../services/whatsappService.js";
+>>>>>>> theirs
 
 
 // @desc    Get all orders
@@ -128,8 +136,12 @@ export const createOrder = asyncHandler(async (req, res) => {
     razorpayOrderId = "",
     razorpayPaymentId = "",
     deliveryCharge = 0,
+<<<<<<< ours
     discount = 0,
     tax = 0,
+=======
+    whatsappOptIn = false,
+>>>>>>> theirs
   } = req.body;
 
   if (!customer || !items || !items.length || totalAmount === undefined) {
@@ -201,9 +213,14 @@ export const createOrder = asyncHandler(async (req, res) => {
 
     deliveryCharge: Number(deliveryCharge),
 
+    whatsappOptIn: whatsappOptIn === true,
+
     notes: notes || "",
     statusHistory: [{ status: "Pending", changedBy: req.user._id }],
   });
+
+  void sendAdminNewOrderMessage(order);
+  void sendOrderPlacedMessage(order);
 
   res.status(201).json(order);
 });
@@ -217,6 +234,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     throw new Error("status is required");
   }
 
+<<<<<<< ours
   const allowed = ["Pending", "Confirmed", "Processing", "Shipped", "Out for Delivery", "Delivered", "Cancelled", "Returned", "Refunded"];
   if (!allowed.includes(status)) {
     res.status(400);
@@ -230,10 +248,26 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   order.status = status;
   order.statusHistory.push({ status, changedBy: req.user._id });
   const updated = await order.save();
+=======
+  const existing = await Order.findById(req.params.id);
 
-  if (!updated) {
+  if (!existing) {
     res.status(404);
     throw new Error("Order not found");
+  }
+
+  const updated = await Order.findByIdAndUpdate(
+    req.params.id,
+    { status },
+    { new: true, runValidators: true }
+  );
+>>>>>>> theirs
+
+  if (
+    existing.status !== status &&
+    ["Confirmed", "Preparing", "Out for Delivery", "Delivered", "Cancelled"].includes(status)
+  ) {
+    void sendOrderStatusMessage(updated);
   }
 
   res.json(updated);

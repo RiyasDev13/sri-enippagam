@@ -7,7 +7,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+<<<<<<< ours
     "seed": "node seed.js"
+=======
+    "seed": "node data/seed.js",
+    "test:whatsapp": "node scripts/testWhatsApp.js"
+>>>>>>> theirs
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

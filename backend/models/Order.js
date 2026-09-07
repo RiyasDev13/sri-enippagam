@@ -70,6 +70,10 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    whatsappOptIn: {
+      type: Boolean,
+      default: false,
+    },
     status: {
       type: String,
       enum: orderStatusValues,
