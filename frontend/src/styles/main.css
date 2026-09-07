@@ -434,7 +434,13 @@ img {
   display: inline-block;
   padding-left: 100%;
   margin: 0;
+  color: #fff;
   animation: marquee 22s linear infinite;
+}
+
+:root[data-theme="dark"] .topbar .marquee-text,
+.site-wrapper[data-theme="bw"] .topbar .marquee-text {
+  color: #fff;
 }
 
 @keyframes marquee {
