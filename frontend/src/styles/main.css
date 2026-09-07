@@ -1996,6 +1996,36 @@ img {
 .payment-option-check { margin-left: auto; color: var(--color-primary); opacity: 0; }
 .payment-option.is-selected .payment-option-check { opacity: 1; }
 
+.whatsapp-opt-in {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 4px !important;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  cursor: pointer;
+}
+
+.checkout-form .whatsapp-opt-in input {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  margin: 2px 0 0;
+  padding: 0;
+  accent-color: var(--color-primary);
+}
+
+.whatsapp-opt-in span {
+  display: grid;
+  gap: 3px;
+}
+
+.whatsapp-opt-in strong { color: var(--text); font-size: 0.84rem; }
+.whatsapp-opt-in strong i { margin-right: 6px; color: #25d366; }
+.whatsapp-opt-in small { color: var(--text-secondary); font-size: 0.75rem; }
+
 .receipt-button { margin: 12px auto; }
 
 .checkout-form label,
