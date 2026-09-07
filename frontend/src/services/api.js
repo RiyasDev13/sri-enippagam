@@ -97,6 +97,15 @@ export const getMyOrders = () =>
 export const getOrder = (id) =>
   api.get(`/orders/${id}`).then((res) => res.data);
 
+export const getCustomerOrder = (id) =>
+  api
+    .get(`/orders/customer/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("customerToken") || ""}`,
+      },
+    })
+    .then((res) => res.data);
+
 export const createOrder = (data) =>
   api
     .post("/orders", data, {

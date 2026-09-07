@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyOrders } from "../services/api.js";
+import { downloadReceipt } from "../utils/receipt.js";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -134,6 +135,9 @@ export default function Account() {
                       <span>{order.items.length} item{order.items.length === 1 ? "" : "s"}</span>
                       <strong>₹{order.totalAmount}</strong>
                     </div>
+                    <button className="account-receipt-button" onClick={() => downloadReceipt(order)}>
+                      <i className="bi bi-download"></i> Download receipt
+                    </button>
                   </article>
                 ))}
               </div>

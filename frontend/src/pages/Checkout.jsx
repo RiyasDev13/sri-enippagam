@@ -249,9 +249,8 @@ export default function Checkout() {
             ========================== */}
             <h4>Payment Method</h4>
 
-            <div className="payment-options">
-
-              <label>
+            <div className="payment-options" role="radiogroup" aria-label="Payment method">
+              <label className={`payment-option ${paymentMethod === "RAZORPAY" ? "is-selected" : ""}`}>
                 <input
                   type="radio"
                   name="paymentMethod"
@@ -262,15 +261,15 @@ export default function Checkout() {
                   }
                 />
 
-                <span>
-                  Online Payment
-                  <small>
-                    UPI / Card / Net Banking
-                  </small>
+                <span className="payment-option-copy">
+                  <strong><i className="bi bi-credit-card-2-front"></i> Online Payment</strong>
+                  <small>UPI, credit/debit card or net banking</small>
+                  <em>Secure checkout powered by Razorpay</em>
                 </span>
+                <i className="bi bi-check-circle-fill payment-option-check" aria-hidden="true"></i>
               </label>
 
-              <label>
+              <label className={`payment-option ${paymentMethod === "COD" ? "is-selected" : ""}`}>
                 <input
                   type="radio"
                   name="paymentMethod"
@@ -281,12 +280,12 @@ export default function Checkout() {
                   }
                 />
 
-                <span>
-                  Cash on Delivery
-                  <small>
-                    Pay when your order is delivered
-                  </small>
+                <span className="payment-option-copy">
+                  <strong><i className="bi bi-box-seam"></i> Cash on Delivery</strong>
+                  <small>Pay when your order is delivered</small>
+                  <em>Keep cash ready for the delivery partner</em>
                 </span>
+                <i className="bi bi-check-circle-fill payment-option-check" aria-hidden="true"></i>
               </label>
 
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getOrder, updateOrderStatus } from "../../services/api.js";
+import { downloadReceipt } from "../../utils/receipt.js";
 import Loader from "../../components/common/Loader.jsx";
 
 const statuses = [
@@ -77,7 +78,7 @@ export default function OrderDetails() {
       <div className="admin-page">
         <Link className="admin-back-link" to="/admin/orders"><i className="bi bi-arrow-left"></i> Back to Orders</Link>
 
-      <div className="admin-detail-heading"><div><p className="admin-eyebrow">Order #{order._id.slice(0, 8)}</p><h2 className="admin-section-title">Order details</h2></div><span className={`status-badge status-${order.status.replace(/\s/g, "-").toLowerCase()}`}>{order.status}</span></div>
+      <div className="admin-detail-heading"><div><p className="admin-eyebrow">Order #{order._id.slice(0, 8)}</p><h2 className="admin-section-title">Order details</h2></div><div className="admin-detail-actions"><button className="admin-secondary-btn" onClick={() => downloadReceipt(order)}><i className="bi bi-download"></i> Download receipt</button><span className={`status-badge status-${order.status.replace(/\s/g, "-").toLowerCase()}`}>{order.status}</span></div></div>
 
       <div className="admin-order-details">
         <div className="order-info-block">
