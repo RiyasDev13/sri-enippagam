@@ -1,6 +1,11 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import Order from "../models/Order.js";
 import razorpay from "../services/razorpayService.js";
+import {
+  sendAdminNewOrderMessage,
+  sendOrderPlacedMessage,
+  sendOrderStatusMessage,
+} from "../services/whatsappService.js";
 
 
 // @desc    Get all orders
@@ -62,6 +67,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     razorpayOrderId = "",
     razorpayPaymentId = "",
     deliveryCharge = 0,
+    whatsappOptIn = false,
   } = req.body;
 
   if (!customer || !items || !items.length || totalAmount === undefined) {
@@ -123,8 +129,13 @@ export const createOrder = asyncHandler(async (req, res) => {
 
     deliveryCharge: Number(deliveryCharge),
 
+    whatsappOptIn: whatsappOptIn === true,
+
     notes: notes || "",
   });
+
+  void sendAdminNewOrderMessage(order);
+  void sendOrderPlacedMessage(order);
 
   res.status(201).json(order);
 });
@@ -138,15 +149,24 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     throw new Error("status is required");
   }
 
+  const existing = await Order.findById(req.params.id);
+
+  if (!existing) {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+
   const updated = await Order.findByIdAndUpdate(
     req.params.id,
     { status },
     { new: true, runValidators: true }
   );
 
-  if (!updated) {
-    res.status(404);
-    throw new Error("Order not found");
+  if (
+    existing.status !== status &&
+    ["Confirmed", "Preparing", "Out for Delivery", "Delivered", "Cancelled"].includes(status)
+  ) {
+    void sendOrderStatusMessage(updated);
   }
 
   res.json(updated);

@@ -23,6 +23,7 @@ export default function Checkout() {
   const [error, setError] = useState(null);
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [whatsappOptIn, setWhatsappOptIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -61,6 +62,7 @@ export default function Checkout() {
         totalAmount: finalAmount,
         paymentMethod: "COD",
         deliveryCharge,
+        whatsappOptIn,
       });
 
       clearCart();
@@ -134,6 +136,8 @@ export default function Checkout() {
             
 
             deliveryCharge,
+
+            whatsappOptIn,
 
             razorpayOrderId: response.razorpay_order_id,
 
@@ -289,6 +293,18 @@ export default function Checkout() {
               </label>
 
             </div>
+
+            <label className="whatsapp-opt-in">
+              <input
+                type="checkbox"
+                checked={whatsappOptIn}
+                onChange={(e) => setWhatsappOptIn(e.target.checked)}
+              />
+              <span>
+                <strong><i className="bi bi-whatsapp"></i> Send me order updates on WhatsApp</strong>
+                <small>We will use the mobile number above for order notifications.</small>
+              </span>
+            </label>
 
             {/* =========================
                 ERROR MESSAGE
