@@ -896,6 +896,27 @@
   overflow: hidden;
 }
 
+.admin-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid #cbd9e3;
+  border-radius: 7px;
+  background: #fff;
+  color: #53616d;
+  font: 500 0.78rem "Poppins", sans-serif;
+  cursor: pointer;
+}
+
+.admin-secondary-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
 .order-info-block,
 .order-status-block {
   min-height: 165px;
@@ -1358,6 +1379,12 @@
 .order-status-block {
   border-color: var(--admin-border);
 }
+
+  .admin-detail-actions {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+    gap: 9px;
+  }
 
 .order-info-block h4,
 .order-status-block h4,

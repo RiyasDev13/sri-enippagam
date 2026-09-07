@@ -3,6 +3,7 @@ import {
   getOrders,
   getMyOrders,
   getOrderById,
+  getCustomerOrderById,
   createOrder,
   updateOrderStatus,
 } from "../controllers/orderController.js";
@@ -19,6 +20,8 @@ router.route("/").get(protectAdmin, getOrders);
 
 // Customer-only route
 router.route("/my").get(protectCustomer, getMyOrders);
+
+router.route("/customer/:id").get(protectCustomer, getCustomerOrderById);
 
 router.route("/:id").get(protectAdmin, getOrderById);
 

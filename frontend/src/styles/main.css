@@ -1942,6 +1942,56 @@ img {
   gap: 6px;
 }
 
+.payment-options {
+  display: grid;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.payment-option {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin: 0 !important;
+  padding: 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-option:hover,
+.payment-option.is-selected {
+  border-color: var(--color-primary);
+  background: var(--color-bg-light);
+  box-shadow: 0 4px 14px rgba(25, 119, 204, 0.1);
+}
+
+.payment-option input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin: 3px 0 0;
+  accent-color: var(--color-primary);
+}
+
+.payment-option-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.payment-option-copy strong { color: var(--text); font-family: "Poppins", sans-serif; }
+.payment-option-copy strong i { margin-right: 7px; color: var(--color-primary); }
+.payment-option-copy small { color: var(--text-secondary); font-size: 0.83rem; }
+.payment-option-copy em { color: var(--color-primary); font-size: 0.72rem; font-style: normal; }
+.payment-option-check { margin-left: auto; color: var(--color-primary); opacity: 0; }
+.payment-option.is-selected .payment-option-check { opacity: 1; }
+
+.receipt-button { margin: 12px auto; }
+
 .checkout-form label,
 .contact-form label,
 .admin-form label,
@@ -2208,6 +2258,24 @@ img {
 .footer-developer-credit {
   margin-top: 8px !important;
   color: #66727d;
+.account-receipt-button,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #cbd9e3;
+  border-radius: 6px;
+  padding: 8px 11px;
+  background: transparent;
+  color: var(--color-primary);
+  font: 500 0.78rem "Poppins", sans-serif;
+  cursor: pointer;
+}
+
+.account-receipt-button { margin-top: 14px; }
+.account-receipt-button:hover,
+.btn-secondary:hover { background: var(--color-bg-light); border-color: var(--color-primary); }
   font-size: 0.78rem;
 }
 

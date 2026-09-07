@@ -34,6 +34,22 @@ export const getOrderById = asyncHandler(async (req, res) => {
   res.json(order);
 });
 
+// @desc    Get a single order for the logged-in customer
+// @route   GET /api/orders/customer/:id
+export const getCustomerOrderById = asyncHandler(async (req, res) => {
+  const order = await Order.findOne({
+    _id: req.params.id,
+    customerId: req.user._id,
+  });
+
+  if (!order) {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+
+  res.json(order);
+});
+
 // @desc    Place a new order
 // @route   POST /api/orders
 export const createOrder = asyncHandler(async (req, res) => {
