@@ -10,6 +10,18 @@ const orderItemSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const orderStatusValues = [
+  "Pending",
+  "Confirmed",
+  "Processing",
+  "Shipped",
+  "Out for Delivery",
+  "Delivered",
+  "Cancelled",
+  "Returned",
+  "Refunded",
+];
+
 /**
  * Mongoose schema for an Order.
  * Ready for MongoDB once you set USE_DB=true - see data/store.js for the
@@ -29,6 +41,9 @@ const orderSchema = new mongoose.Schema(
     },
     items: [orderItemSchema],
     totalAmount: { type: Number, required: true },
+    subtotal: { type: Number, default: 0 },
+    discount: { type: Number, default: 0 },
+    tax: { type: Number, default: 0 },
     paymentMethod: {
       type: String,
       enum: ["RAZORPAY", "COD"],
@@ -37,7 +52,7 @@ const orderSchema = new mongoose.Schema(
 
     paymentStatus: {
       type: String,
-      enum: ["Pending", "Paid", "Failed"],
+      enum: ["Pending", "Paid", "Failed", "Refunded"],
       default: "Pending",
     },
 
@@ -61,9 +76,14 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Confirmed", "Preparing", "Out for Delivery", "Delivered", "Cancelled"],
+      enum: orderStatusValues,
       default: "Pending",
     },
+    statusHistory: [{
+      status: { type: String, enum: orderStatusValues },
+      changedAt: { type: Date, default: Date.now },
+      changedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
+    }],
     notes: { type: String, default: "" },
   },
   { timestamps: true }

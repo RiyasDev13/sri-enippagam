@@ -162,3 +162,29 @@
     font-size: 24px;
   }
 }
+
+.site-wrapper[data-theme="bw"] ~ .customer-auth-page,
+:root[data-theme="dark"] .customer-auth-page {
+  background: var(--background);
+}
+
+:root[data-theme="dark"] .customer-auth-card {
+  background: var(--card);
+  color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .customer-auth-header h1,
+:root[data-theme="dark"] .customer-auth-field label {
+  color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .customer-auth-header p,
+:root[data-theme="dark"] .customer-auth-footer p {
+  color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .customer-auth-field input {
+  border-color: var(--border-color);
+  background: var(--card);
+  color: var(--text-primary);
+}

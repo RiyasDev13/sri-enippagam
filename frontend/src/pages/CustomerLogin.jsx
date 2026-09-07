@@ -33,7 +33,7 @@ export default function CustomerLogin() {
       localStorage.setItem("customerToken", data.token);
       localStorage.setItem("customer", JSON.stringify(data.customer));
 
-      navigate("/");
+      navigate("/products/all");
     } catch (error) {
       setError(error.response?.data?.message || error.message || "Login failed");
     } finally {

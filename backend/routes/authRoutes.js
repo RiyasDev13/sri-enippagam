@@ -3,6 +3,9 @@ import {
   adminLogin,
   customerLogin,
   customerRegister,
+  getCustomerProfile,
+  saveCustomerDetails,
+  deleteCustomerDetails,
 } from "../controllers/authController.js";
 import { protectAdmin, protectCustomer } from "../middleware/auth.js";
 
@@ -18,10 +21,8 @@ router.get("/admin/profile", protectAdmin, (req, res) => {
 router.post("/customer/register", customerRegister);
 router.post("/customer/login", customerLogin);
 
-router.get("/customer/profile", protectCustomer, (req, res) => {
-  res.json({
-    customer: req.user,
-  });
-});
+router.get("/customer/profile", protectCustomer, getCustomerProfile);
+router.post("/customer/saved-details", protectCustomer, saveCustomerDetails);
+router.delete("/customer/saved-details/:detailId", protectCustomer, deleteCustomerDetails);
 
 export default router;

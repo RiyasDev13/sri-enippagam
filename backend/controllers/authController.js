@@ -80,7 +80,7 @@ export const customerRegister = asyncHandler(async (req, res) => {
     email,
     password: hashedPassword,
     phone: phone || "",
-    addresses: [],
+    savedDetails: [],
   });
 
   const token = jwt.sign(
@@ -101,6 +101,7 @@ export const customerRegister = asyncHandler(async (req, res) => {
       name: customer.name,
       email: customer.email,
       phone: customer.phone,
+      savedDetails: customer.savedDetails,
     },
   });
 });
@@ -150,6 +151,42 @@ export const customerLogin = asyncHandler(async (req, res) => {
       name: customer.name,
       email: customer.email,
       phone: customer.phone,
+      savedDetails: customer.savedDetails,
     },
   });
+});
+
+export const getCustomerProfile = asyncHandler(async (req, res) => {
+  const customer = await Customer.findById(req.user._id).select("-password");
+  res.json({ customer });
+});
+
+export const saveCustomerDetails = asyncHandler(async (req, res) => {
+  const { name, email, phone, address } = req.body;
+  if (!name || !email || !phone || !address) {
+    res.status(400);
+    throw new Error("Full name, email, mobile number and delivery address are required");
+  }
+
+  const customer = await Customer.findById(req.user._id);
+  if (customer.savedDetails.length >= 5) {
+    res.status(409);
+    throw new Error("You can save a maximum of 5 checkout details");
+  }
+
+  customer.savedDetails.push({ name, email, phone, address });
+  await customer.save();
+  res.status(201).json({ savedDetails: customer.savedDetails });
+});
+
+export const deleteCustomerDetails = asyncHandler(async (req, res) => {
+  const customer = await Customer.findById(req.user._id);
+  const detail = customer.savedDetails.id(req.params.detailId);
+  if (!detail) {
+    res.status(404);
+    throw new Error("Saved checkout details not found");
+  }
+  detail.deleteOne();
+  await customer.save();
+  res.json({ savedDetails: customer.savedDetails });
 });
