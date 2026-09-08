@@ -1,4 +1,4 @@
-# sri — React E-commerce Site
+# Butterscotch — React E-commerce Site
 
 A React conversion of the original sri HTML site, extended into a working
 storefront (browse products, cart, checkout, customer account) with an admin
