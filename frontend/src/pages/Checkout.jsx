@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import {
   createOrder,
   createPaymentOrder,
   verifyPayment,
+  getCustomerProfile,
+  saveCustomerDetails,
 } from "../services/api.js";
 import SubBanner from "../components/common/SubBanner.jsx";
 
@@ -23,6 +25,14 @@ export default function Checkout() {
   const [error, setError] = useState(null);
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
+
+  // Saved customer details
+  const [savedDetails, setSavedDetails] = useState([]);
+  const [selectedDetailsId, setSelectedDetailsId] = useState("");
+  const [saveDetails, setSaveDetails] = useState(false);
+  const [detailsMessage, setDetailsMessage] = useState("");
+
+  // WhatsApp notifications
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
 
   const navigate = useNavigate();
@@ -33,6 +43,30 @@ export default function Checkout() {
   // Final amount including delivery
   const finalAmount = Number(totalAmount) + deliveryCharge;
 
+  useEffect(() => {
+    if (!localStorage.getItem("customerToken")) return;
+
+    getCustomerProfile()
+      .then(({ customer }) => {
+        const details = customer?.savedDetails || [];
+
+        setSavedDetails(details);
+
+        if (details.length) {
+          setSelectedDetailsId(String(details[0]._id));
+          setForm(details[0]);
+        } else {
+          setForm((current) => ({
+            ...current,
+            name: current.name || customer?.name || "",
+            email: current.email || customer?.email || "",
+            phone: current.phone || customer?.phone || "",
+          }));
+        }
+      })
+      .catch(() => setDetailsMessage("Could not load your saved details."));
+  }, []);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -40,147 +74,176 @@ export default function Checkout() {
     });
   };
 
+  const handleSavedDetailsChange = (e) => {
+    const detail = savedDetails.find((item) => item._id === e.target.value);
+
+    setSelectedDetailsId(e.target.value);
+
+    if (detail) {
+      setForm({
+        name: detail.name,
+        email: detail.email,
+        phone: detail.phone,
+        address: detail.address,
+      });
+    } else {
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  setSubmitting(true);
-  setError(null);
+    setSubmitting(true);
+    setError(null);
 
-  try {
-    // =========================
-    // CASH ON DELIVERY
-    // =========================
-    if (paymentMethod === "COD") {
-      const order = await createOrder({
-        customer: form,
-        items: items.map((item) => ({
-          productId: String(item.id),
-          name: item.name,
-          price: Number(item.price),
-          quantity: Number(item.quantity),
-        })),
-        totalAmount: finalAmount,
-        paymentMethod: "COD",
+    try {
+      if (saveDetails) {
+        const result = await saveCustomerDetails(form);
+
+        setSavedDetails(result.savedDetails || []);
+        setSaveDetails(false);
+        setDetailsMessage("Details saved for your next checkout.");
+      }
+
+      // =========================
+      // CASH ON DELIVERY
+      // =========================
+      if (paymentMethod === "COD") {
+        const order = await createOrder({
+          customer: form,
+          items: items.map((item) => ({
+            productId: String(item.id),
+            name: item.name,
+            price: Number(item.price),
+            quantity: Number(item.quantity),
+          })),
+          totalAmount: finalAmount,
+          paymentMethod: "COD",
+          deliveryCharge,
+          whatsappOptIn,
+        });
+
+        clearCart();
+
+        navigate(`/order-success/${order._id}`);
+        return;
+      }
+
+      // =========================
+      // RAZORPAY PAYMENT
+      // =========================
+
+      const razorpayOrder = await createPaymentOrder({
+        amount: Number(totalAmount),
         deliveryCharge,
-        whatsappOptIn,
       });
 
-      clearCart();
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
-      navigate(`/order-success/${order._id}`);
-      return;
-    }
+        amount: razorpayOrder.amount,
 
-    // =========================
-    // RAZORPAY PAYMENT
-    // =========================
-
-    const razorpayOrder = await createPaymentOrder({
-      amount: Number(totalAmount),
-      deliveryCharge,
-    });
-
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-
-      amount: razorpayOrder.amount,
-
-      currency: razorpayOrder.currency,
+        currency: razorpayOrder.currency,
 
       name: "sri",
 
-      description: "sri Order",
+      description: "Sri Enippagam Order",
 
-      order_id: razorpayOrder.id,
+        order_id: razorpayOrder.id,
 
-      prefill: {
-        name: form.name,
-        email: form.email,
-        contact: form.phone,
-      },
-
-      theme: {
-        color: "#1977CC",
-      },
-
-      handler: async function (response) {
-        console.log("Razorpay payment response:", response);
-
-        try {
-          // First verify the payment with our backend
-          const verification = await verifyPayment({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          });
-
-          if (!verification.success) {
-            throw new Error("Payment verification failed");
-          }
-
-          // Only create the order after payment is verified
-          const order = await createOrder({
-            customer: form,
-
-            items: items.map((item) => ({
-              productId: String(item.id),
-              name: item.name,
-              price: Number(item.price),
-              quantity: Number(item.quantity),
-            })),
-
-            totalAmount: finalAmount,
-
-            paymentMethod: "RAZORPAY",
-
-            
-
-            deliveryCharge,
-
-            whatsappOptIn,
-
-            razorpayOrderId: response.razorpay_order_id,
-
-            razorpayPaymentId: response.razorpay_payment_id,
-          });
-
-          clearCart();
-
-          navigate(`/order-success/${order._id}`);
-        } catch (err) {
-          console.error("Payment verification error:", err);
-
-          setError(
-            err.response?.data?.message ||
-              "Payment verification failed. Please contact us if money was deducted."
-          );
-          setSubmitting(false);
-        }
-      },
-
-      modal: {
-        ondismiss: function () {
-          setSubmitting(false);
-          setError("Payment was cancelled.");
+        prefill: {
+          name: form.name,
+          email: form.email,
+          contact: form.phone,
         },
-      },
-    };
 
-    const razorpay = new window.Razorpay(options);
+        theme: {
+          color: "#1977CC",
+        },
 
-    razorpay.open();
+        handler: async function (response) {
+          console.log("Razorpay payment response:", response);
 
-  } catch (err) {
-    console.error("Payment error:", err);
+          try {
+            // First verify the payment with our backend
+            const verification = await verifyPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
 
-    setError(
-      err.response?.data?.message ||
-        "Could not start the payment. Please try again."
-    );
+            if (!verification.success) {
+              throw new Error("Payment verification failed");
+            }
 
-    setSubmitting(false);
-  }
-};
+            // Only create the order after payment is verified
+            const order = await createOrder({
+              customer: form,
+
+              items: items.map((item) => ({
+                productId: String(item.id),
+                name: item.name,
+                price: Number(item.price),
+                quantity: Number(item.quantity),
+              })),
+
+              totalAmount: finalAmount,
+
+              paymentMethod: "RAZORPAY",
+
+              deliveryCharge,
+
+              whatsappOptIn,
+
+              razorpayOrderId: response.razorpay_order_id,
+
+              razorpayPaymentId: response.razorpay_payment_id,
+            });
+
+            clearCart();
+
+            navigate(`/order-success/${order._id}`);
+          } catch (err) {
+            console.error("Payment verification error:", err);
+
+            setError(
+              err.response?.data?.message ||
+                "Payment verification failed. Please contact us if money was deducted."
+            );
+
+            setSubmitting(false);
+          }
+        },
+
+        modal: {
+          ondismiss: function () {
+            setSubmitting(false);
+            setError("Payment was cancelled.");
+          },
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.open();
+    } catch (err) {
+      console.error("Payment error:", err);
+
+      setError(
+        err.response?.data?.message ||
+          "Could not start the payment. Please try again."
+      );
+
+      setSubmitting(false);
+    }
+  };
+
   if (items.length === 0) {
     return (
       <>
@@ -209,6 +272,28 @@ export default function Checkout() {
           ========================== */}
           <form className="checkout-form" onSubmit={handleSubmit}>
             <h4>Your Details</h4>
+
+            {savedDetails.length > 0 && (
+              <div className="saved-details-picker">
+                <label htmlFor="saved-details">Use saved details</label>
+
+                <select
+                  id="saved-details"
+                  value={selectedDetailsId}
+                  onChange={handleSavedDetailsChange}
+                >
+                  <option value="">Enter new checkout details</option>
+
+                  {savedDetails.map((detail, index) => (
+                    <option key={detail._id} value={detail._id}>
+                      {index + 1}. {detail.name} - {detail.phone}
+                    </option>
+                  ))}
+                </select>
+
+                <small>{savedDetails.length}/5 saved details</small>
+              </div>
+            )}
 
             <label>Full Name *</label>
 
@@ -248,50 +333,91 @@ export default function Checkout() {
               required
             />
 
+            {localStorage.getItem("customerToken") &&
+              savedDetails.length < 5 && (
+                <label className="save-details-option">
+                  <input
+                    type="checkbox"
+                    checked={saveDetails}
+                    onChange={(e) => setSaveDetails(e.target.checked)}
+                  />
+
+                  Save these details for next time
+                </label>
+              )}
+
+            {detailsMessage && (
+              <p className="checkout-details-message">{detailsMessage}</p>
+            )}
+
             {/* =========================
                 PAYMENT METHOD
             ========================== */}
             <h4>Payment Method</h4>
 
-            <div className="payment-options" role="radiogroup" aria-label="Payment method">
-              <label className={`payment-option ${paymentMethod === "RAZORPAY" ? "is-selected" : ""}`}>
+            <div
+              className="payment-options"
+              role="radiogroup"
+              aria-label="Payment method"
+            >
+              <label
+                className={`payment-option ${
+                  paymentMethod === "RAZORPAY" ? "is-selected" : ""
+                }`}
+              >
                 <input
                   type="radio"
                   name="paymentMethod"
                   value="RAZORPAY"
                   checked={paymentMethod === "RAZORPAY"}
-                  onChange={(e) =>
-                    setPaymentMethod(e.target.value)
-                  }
+                  onChange={(e) => setPaymentMethod(e.target.value)}
                 />
 
                 <span className="payment-option-copy">
-                  <strong><i className="bi bi-credit-card-2-front"></i> Online Payment</strong>
+                  <strong>
+                    <i className="bi bi-credit-card-2-front"></i>{" "}
+                    Online Payment
+                  </strong>
+
                   <small>UPI, credit/debit card or net banking</small>
+
                   <em>Secure checkout powered by Razorpay</em>
                 </span>
-                <i className="bi bi-check-circle-fill payment-option-check" aria-hidden="true"></i>
+
+                <i
+                  className="bi bi-check-circle-fill payment-option-check"
+                  aria-hidden="true"
+                ></i>
               </label>
 
-              <label className={`payment-option ${paymentMethod === "COD" ? "is-selected" : ""}`}>
+              <label
+                className={`payment-option ${
+                  paymentMethod === "COD" ? "is-selected" : ""
+                }`}
+              >
                 <input
                   type="radio"
                   name="paymentMethod"
                   value="COD"
                   checked={paymentMethod === "COD"}
-                  onChange={(e) =>
-                    setPaymentMethod(e.target.value)
-                  }
+                  onChange={(e) => setPaymentMethod(e.target.value)}
                 />
 
                 <span className="payment-option-copy">
-                  <strong><i className="bi bi-box-seam"></i> Cash on Delivery</strong>
+                  <strong>
+                    <i className="bi bi-box-seam"></i> Cash on Delivery
+                  </strong>
+
                   <small>Pay when your order is delivered</small>
+
                   <em>Keep cash ready for the delivery partner</em>
                 </span>
-                <i className="bi bi-check-circle-fill payment-option-check" aria-hidden="true"></i>
-              </label>
 
+                <i
+                  className="bi bi-check-circle-fill payment-option-check"
+                  aria-hidden="true"
+                ></i>
+              </label>
             </div>
 
             <label className="whatsapp-opt-in">
@@ -300,9 +426,16 @@ export default function Checkout() {
                 checked={whatsappOptIn}
                 onChange={(e) => setWhatsappOptIn(e.target.checked)}
               />
+
               <span>
-                <strong><i className="bi bi-whatsapp"></i> Send me order updates on WhatsApp</strong>
-                <small>We will use the mobile number above for order notifications.</small>
+                <strong>
+                  <i className="bi bi-whatsapp"></i>{" "}
+                  Send me order updates on WhatsApp
+                </strong>
+
+                <small>
+                  We will use the mobile number above for order notifications.
+                </small>
               </span>
             </label>
 

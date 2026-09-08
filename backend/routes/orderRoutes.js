@@ -6,6 +6,9 @@ import {
   getCustomerOrderById,
   createOrder,
   updateOrderStatus,
+  updatePaymentStatus,
+  bulkUpdateOrderStatus,
+  getDashboardSummary,
 } from "../controllers/orderController.js";
 import { protectAdmin, protectCustomer } from "../middleware/auth.js";
 
@@ -17,6 +20,7 @@ router.route("/").post(protectCustomer, createOrder);
 
 // Admin-only routes
 router.route("/").get(protectAdmin, getOrders);
+router.route("/dashboard-summary").get(protectAdmin, getDashboardSummary);
 
 // Customer-only route
 router.route("/my").get(protectCustomer, getMyOrders);
@@ -26,5 +30,7 @@ router.route("/customer/:id").get(protectCustomer, getCustomerOrderById);
 router.route("/:id").get(protectAdmin, getOrderById);
 
 router.route("/:id/status").patch(protectAdmin, updateOrderStatus);
+router.route("/:id/payment-status").patch(protectAdmin, updatePaymentStatus);
+router.route("/bulk-status").patch(protectAdmin, bulkUpdateOrderStatus);
 
 export default router;

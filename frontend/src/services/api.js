@@ -17,6 +17,19 @@ export const loginCustomer = (data) =>
 export const registerCustomer = (data) =>
   api.post("/auth/customer/register", data).then((res) => res.data);
 
+const customerAuthConfig = () => ({
+  headers: { Authorization: `Bearer ${localStorage.getItem("customerToken") || ""}` },
+});
+
+export const getCustomerProfile = () =>
+  api.get("/auth/customer/profile", customerAuthConfig()).then((res) => res.data);
+
+export const saveCustomerDetails = (data) =>
+  api.post("/auth/customer/saved-details", data, customerAuthConfig()).then((res) => res.data);
+
+export const deleteCustomerDetails = (id) =>
+  api.delete(`/auth/customer/saved-details/${id}`, customerAuthConfig()).then((res) => res.data);
+
 // Automatically attach the admin JWT when available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("adminToken");
@@ -82,8 +95,11 @@ export const verifyPayment = (data) =>
     .then((res) => res.data);
 
 // ----- Orders -----
-export const getOrders = () =>
-  api.get("/orders").then((res) => res.data);
+export const getOrders = (params = {}) =>
+  api.get("/orders", { params }).then((res) => res.data);
+
+export const getDashboardSummary = (params = {}) =>
+  api.get("/orders/dashboard-summary", { params }).then((res) => res.data);
 
 export const getMyOrders = () =>
   api
@@ -119,6 +135,12 @@ export const updateOrderStatus = (id, status) =>
   api
     .patch(`/orders/${id}/status`, { status })
     .then((res) => res.data);
+
+export const updatePaymentStatus = (id, paymentStatus) =>
+  api.patch(`/orders/${id}/payment-status`, { paymentStatus }).then((res) => res.data);
+
+export const bulkUpdateOrderStatus = (ids, status) =>
+  api.patch("/orders/bulk-status", { ids, status }).then((res) => res.data);
 
 // ----- Contact -----
 export const createContact = (data) =>
