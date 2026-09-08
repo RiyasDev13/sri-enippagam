@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import "./home.css";
+
 import sriEnippagamFrame from "../assets/sri-inipagam-frame.png";
-import sriEnipagamHome from  "../assets/sri-inipagam-home.jpg";
+import butterscotch from "../assets/butterscotch-video.mp4";
+
 const categories = [
   {
     name: "All Products",
     slug: "all",
     desc: "Browse every sweet, snack, chat and namkeen in one place.",
-    img: "https://www.srienippagam.in/assets/img/home/sweets.webp",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN9sPaYGtUP87L-odxgy5yTdvOPVWpxFVSfT5iw56Adg&s",
     icon: "bi bi-shop",
   },
   {
@@ -39,6 +41,7 @@ const categories = [
     icon: "bi bi-cup-straw",
   },
 ];
+
 const whyUs = [
   {
     img: "https://www.srienippagam.in/assets/img/home/delicious.webp",
@@ -58,10 +61,22 @@ const whyUs = [
 ];
 
 const trustPoints = [
-  { icon: "bi bi-stars", text: "Made Fresh Daily" },
-  { icon: "bi bi-flower1", text: "Quality Ingredients" },
-  { icon: "bi bi-gift", text: "Gift-Ready Packaging" },
-  { icon: "bi bi-geo-alt", text: "Trusted In Pollachi" },
+  {
+    icon: "bi bi-stars",
+    text: "Made Fresh Daily",
+  },
+  {
+    icon: "bi bi-flower1",
+    text: "Quality Ingredients",
+  },
+  {
+    icon: "bi bi-gift",
+    text: "Gift-Ready Packaging",
+  },
+  {
+    icon: "bi bi-geo-alt",
+    text: "Trusted In Pollachi",
+  },
 ];
 
 const testimonials = [
@@ -79,18 +94,9 @@ const testimonials = [
   },
   {
     name: "Swathi Hari",
-    text: "Sri Enippagam sweets and karam are excellent, both in quality and taste.",
+    text: "sri sweets and karam are excellent, both in quality and taste.",
   },
 ];
-
-function initials(name) {
-  return name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
 
 function WaveDivider({ fill }) {
   return (
@@ -112,58 +118,71 @@ function WaveDivider({ fill }) {
 export default function Home() {
   return (
     <>
+      {/* =====================================================
+          HERO SECTION
+      ====================================================== */}
       <section className="hero-slider">
-        <div className="hero-blob hero-blob--one" />
-        <div className="hero-blob hero-blob--two" />
+        {/* Background Video */}
+        <video
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src={butterscotch} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
-        <div className="container hero-slide">
-          <div className="hero-content">
-            <h1>Something Delicious For Every Occasion</h1>
-            <p>
-              Traditional Indian sweets, snacks and chats, made fresh every
-              day.
-            </p>
-            <Link to="/products/sweets" className="btn btn-primary">
-              Shop Now
-            </Link>
-          </div>
+        {/* Dark overlay over video */}
+        <div className="hero-video-overlay"></div>
 
-          <div className="hero-media">
-            <div className="hero-media-frame">
-              <img
-              src={sriEnipagamHome}
-              alt="Sri Enippagam Home"
-            />
-            </div>
-            <div className="hero-badge">
-              <span className="hero-badge-icon">
-                <i className="fa-solid fa-star" />
-              </span>
-              100% Fresh, Every Day
-            </div>
-          </div>
+        {/* Hero Content */}
+        <div className="container hero-content">
+          <h1>Something Delicious For Every Occasion</h1>
+
+          <p>
+            Traditional Indian sweets, snacks and chats, made fresh every day.
+          </p>
+
+          <Link to="/products/sweets" className="btn btn-primary">
+            Shop Now
+          </Link>
         </div>
 
+        {/* Bottom Wave */}
         <WaveDivider fill="#fff" />
       </section>
 
+      {/* =====================================================
+          TRUST STRIP
+      ====================================================== */}
       <div className="trust-strip">
         <div className="container trust-strip-grid">
           {trustPoints.map((t) => (
             <div className="trust-item" key={t.text}>
               <span className="trust-item-icon">
-                <i className={t.icon} />
+                <i className={t.icon}></i>
               </span>
-              <span className="trust-item-text">{t.text}</span>
+
+              <span className="trust-item-text">
+                {t.text}
+              </span>
             </div>
           ))}
         </div>
       </div>
 
+      {/* =====================================================
+          WELCOME SECTION
+      ====================================================== */}
       <section className="section welcome-section">
         <div className="container welcome-grid">
           <div className="welcome-copy">
-            <h4 className="eyebrow">Welcome to Sri Enippagam</h4>
+            <h4 className="eyebrow">
+              Welcome to Butterscotch
+            </h4>
 
             <p>
               Our company is a leading supplier, manufacturer and retailer of
@@ -186,15 +205,21 @@ export default function Home() {
           </div>
 
           <img
-            src={sriEnippagamFrame}
-            alt="Sri Enippagam"
+            src="https://curlytales.com/wp-content/uploads/2019/10/Best-Sweet-Shops-In-Mumbai.jpg"
+            alt="sri"
           />
         </div>
       </section>
 
+      {/* =====================================================
+          WHY CHOOSE US
+      ====================================================== */}
       <section className="section why-section">
         <div className="container">
-          <h2 className="section-title">Why Choose Us</h2>
+          <h2 className="section-title">
+            Why Choose Us
+          </h2>
+
           <p className="section-lead">
             Everything we make follows recipes passed down through
             generations, prepared fresh in small batches every day.
@@ -204,10 +229,17 @@ export default function Home() {
             {whyUs.map((item) => (
               <div className="why-card" key={item.label}>
                 <span className="why-icon-badge">
-                  <i className={item.icon} />
+                  <i className={item.icon}></i>
                 </span>
-                <img src={item.img} alt={item.label} />
-                <div className="why-overlay">{item.label}</div>
+
+                <img
+                  src={item.img}
+                  alt={item.label}
+                />
+
+                <div className="why-overlay">
+                  {item.label}
+                </div>
               </div>
             ))}
           </div>
@@ -216,25 +248,38 @@ export default function Home() {
         <WaveDivider fill="#F1F7FD" />
       </section>
 
+      {/* =====================================================
+          PRODUCTS SECTION
+      ====================================================== */}
       <section
         className="section products-section"
         style={{ background: "#F1F7FD" }}
       >
         <div className="container">
-          <h2 className="section-title">Our Traditional Products</h2>
+          <h2 className="section-title">
+            Our Traditional Products
+          </h2>
+
           <p className="section-lead">
             Browse our full range, from festival sweets to everyday snacks.
           </p>
 
           <div className="category-grid">
             {categories.map((cat) => (
-              <div className="category-card" key={cat.slug}>
+              <div
+                className="category-card"
+                key={cat.slug}
+              >
                 <span className="category-icon-badge">
-                  <i className={cat.icon} />
+                  <i className={cat.icon}></i>
                 </span>
+
                 <h4>{cat.name}</h4>
 
-                <img src={cat.img} alt={cat.name} />
+                <img
+                  src={cat.img}
+                  alt={cat.name}
+                />
 
                 <p>{cat.desc}</p>
 
@@ -250,25 +295,33 @@ export default function Home() {
         </div>
       </section>
 
-<section className="section testimonials-section">
-  <div className="container">
-    <h2 className="section-title">Our Happy Customers Are Saying</h2>
+      {/* =====================================================
+          TESTIMONIALS
+      ====================================================== */}
+      <section className="section testimonials-section">
+        <div className="container">
+          <h2 className="section-title">
+            Our Happy Customers Are Saying
+          </h2>
 
-    <div className="testimonial-grid">
-      {testimonials.map((t) => (
-        <div className="testimonial-card" key={t.name}>
-          <p className="testimonial-text">
-            "{t.text}"
-          </p>
+          <div className="testimonial-grid">
+            {testimonials.map((t) => (
+              <div
+                className="testimonial-card"
+                key={t.name}
+              >
+                <p className="testimonial-text">
+                  "{t.text}"
+                </p>
 
-          <p className="testimonial-name">
-            @{t.name}
-          </p>
+                <p className="testimonial-name">
+                  @{t.name}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
     </>
   );
 }

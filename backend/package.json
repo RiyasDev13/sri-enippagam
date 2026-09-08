@@ -1,7 +1,7 @@
 {
   "name": "sri-enippagam-backend",
   "version": "1.0.0",
-  "description": "API-ready backend for Sri Enippagam e-commerce site (products, orders). Uses an in-memory store by default; swap in MongoDB via config/db.js and the models/ folder whenever you're ready.",
+  "description": "API-ready backend for sri e-commerce site (products, orders). Uses an in-memory store by default; swap in MongoDB via config/db.js and the models/ folder whenever you're ready.",
   "main": "server.js",
   "type": "module",
   "scripts": {

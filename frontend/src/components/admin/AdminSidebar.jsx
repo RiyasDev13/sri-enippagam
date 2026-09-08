@@ -13,7 +13,7 @@ export default function AdminSidebar({ onNavigate }) {
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
         <span className="admin-brand-mark"><i className="bi bi-shop"></i></span>
-        <span>Sri Enippagam<small>Admin portal</small></span>
+        <span>Butterscotch<small>Admin portal</small></span>
       </div>
 
       <nav>

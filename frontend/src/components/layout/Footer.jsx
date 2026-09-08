@@ -6,12 +6,12 @@ export default function Footer() {
       <div className="footer-top">
         <div className="container footer-grid">
           <div className="footer-contact">
-            <h3>Sri Enippagam</h3>
+            <h3>Butterscotch</h3>
             <p className="footer-intro">Traditional sweets, snacks and chats, made fresh in Pollachi.</p>
             <div className="footer-contact-list">
-              <a href="tel:+919442571648"><i className="bi bi-telephone-fill"></i> +91 94425 71648</a>
-              <a href="tel:+918870054456"><i className="bi bi-telephone-fill"></i> +91 88700 54456</a>
-              <a href="mailto:srienippagam@gmail.com"><i className="bi bi-envelope-fill"></i> srienippagam@gmail.com</a>
+              <a href="tel:+919842272368"><i className="bi bi-telephone-fill"></i> +91 9842271368</a>
+              <a href="tel:+919842272368"><i className="bi bi-telephone-fill"></i> +91 98422723686</a>
+              <a href="mailto:Butterscotch@gmail.com"><i className="bi bi-envelope-fill"></i> Butterscotch@gmail.com</a>
             </div>
           </div>
 
@@ -19,13 +19,13 @@ export default function Footer() {
             <h4>Visit Us</h4>
             <p>
               <span className="footer-label">Branch 1</span>
-              <span className="footer-address">No.36, Rathina Vinayagar Koil Street, Venkatesa Colony, Near Ayyappan Koil, Pollachi - 642001, Tamil Nadu.</span>
+              <span className="footer-address">6/106 Muslim Kovilpalayam, Kovilpalyam, Pollachi - 642001, Tamil Nadu.</span>
             </p>
             <p>
               <span className="footer-label">Branch 2</span>
               <span className="footer-address">New Scheme Rd, BMR Complex, Opp Reliance Trends, Mahalingapuram, Pollachi - 642002, Tamil Nadu.</span>
             </p>
-            <a className="footer-branch-phone" href="tel:+918870144490"><i className="bi bi-telephone-fill"></i> +91 88701 44490</a>
+            <a className="footer-branch-phone" href="tel:+919842272368"><i className="bi bi-telephone-fill"></i> +91 9842272368</a>
           </div>
 
           <div className="footer-links">
@@ -93,7 +93,7 @@ export default function Footer() {
 
       <div className="container footer-bottom">
         <p>
-          © Copyright <strong>Sri Enippagam</strong>. All Rights Reserved.
+          © Copyright <strong>Butterscotch</strong>. All Rights Reserved.
         </p>
         <p className="footer-developer-credit">
           Website designed and developed by{" "}

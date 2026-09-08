@@ -36,7 +36,7 @@ export default function AdminLayout() {
             <i className="bi bi-list"></i>
           </button>
           <div className="admin-heading">
-            <p className="admin-eyebrow">Sri Enippagam Admin</p>
+            <p className="admin-eyebrow">sri Admin</p>
             <h1>{page.title}</h1>
             <p>{page.description}</p>
           </div>

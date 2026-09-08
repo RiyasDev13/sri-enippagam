@@ -4,7 +4,7 @@ export default function TopBar() {
       <div className="container">
         <div className="marquee-wrap">
           <p className="marquee-text">
-            Welcome to Sri Enippagam &nbsp;|&nbsp; Something Delicious For Every Occasion
+            Welcome to  &nbsp;|&nbsp; Something Delicious For Every Occasion
             &nbsp;|&nbsp; Leading Supplier, Manufacturer & Retailer of Indian Mix Sweets
             &nbsp;|&nbsp; Quality Products at Cost-Effective Prices
           </p>

@@ -1,6 +1,7 @@
 import SubBanner from "../components/common/SubBanner.jsx";
 import { Link } from "react-router-dom";
 import sriEnippagamFrame from "../assets/sri-inipagam-frame.png";
+import Butterscotch_shop from "../assets/Butterscotch_shop.png";
 import "./about.css";
 
 const features = [
@@ -33,8 +34,8 @@ export default function About() {
         <div className="container about-intro-grid">
           <div className="about-photo-frame">
             <img
-            src={sriEnippagamFrame}
-            alt="Sri Enippagam"
+            src={Butterscotch_shop}
+            alt="sri"
           />
 
             <div className="about-photo-note">
@@ -49,7 +50,7 @@ export default function About() {
             <h1>Good food has a way of bringing everyone closer.</h1>
 
             <p>
-              Sri Enippagam is a Pollachi favourite for colourful Indian
+              Butterscotch is a Pollachi favourite for colourful Indian
               sweets, savouries and chats made for everyday cravings and
               special moments.
             </p>
@@ -91,7 +92,7 @@ export default function About() {
         <div className="container">
           <div className="about-section-heading">
             <div>
-              <p className="eyebrow">Why Sri Enippagam</p>
+              <p className="eyebrow">Why sri</p>
               <h2>Simple ingredients. Thoughtful making.</h2>
             </div>
 

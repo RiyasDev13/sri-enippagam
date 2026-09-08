@@ -485,7 +485,7 @@ img {
 
 :root[data-theme="dark"] .topbar .marquee-text,
 .site-wrapper[data-theme="bw"] .topbar .marquee-text {
-  color: #fff;
+  color: #222;
 }
 
 @keyframes marquee {

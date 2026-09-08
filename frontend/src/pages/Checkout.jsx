@@ -151,9 +151,9 @@ export default function Checkout() {
 
         currency: razorpayOrder.currency,
 
-        name: "Sri Enippagam",
+      name: "sri",
 
-        description: "Sri Enippagam Order",
+      description: "Sri Enippagam Order",
 
         order_id: razorpayOrder.id,
 

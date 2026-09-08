@@ -37,7 +37,7 @@ const handleSubmit = async (e) => {
               Send us a note and our team will get back to you soon.
             </p>
             <div className="contact-detail-list">
-              <a href="tel:+919442571648"><span className="contact-detail-icon"><i className="bi bi-telephone-fill" /></span><span><small>Call us</small><strong>+91 94425 71648</strong></span></a>
+              <a href="tel:+919842272368"><span className="contact-detail-icon"><i className="bi bi-telephone-fill" /></span><span><small>Call us</small><strong>+91 9842271368</strong></span></a>
               <a href="mailto:srienippagam@gmail.com"><span className="contact-detail-icon"><i className="bi bi-envelope-fill" /></span><span><small>Email us</small><strong>srienippagam@gmail.com</strong></span></a>
             </div>
           </div>
@@ -94,7 +94,7 @@ const handleSubmit = async (e) => {
             <div className="map-card-heading"><span className="map-number">01</span><div><h4>Branch 1</h4><p>Venkatesa Colony</p></div></div>
             <iframe
               title="Branch 1 Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.881210690695!2d77.00379811533378!3d10.66632756413166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8382ba2cd10d5%3A0x1cc635e1378d2eaf!2sSri%20Enippagam%20sweets%20%26%20savories!5e0!3m2!1sen!2sin!4v1660382261870!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.881210690695!2d77.00379811533378!3d10.66632756413166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8382ba2cd10d5%3A0x1cc635e1378d2eaf!2ssri%20Enippagam%20sweets%20%26%20savories!5e0!3m2!1sen!2sin!4v1660382261870!5m2!1sen!2sin"
               width="100%"
               height="350"
               style={{ border: 0 }}

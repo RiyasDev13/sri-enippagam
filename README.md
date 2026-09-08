@@ -1,6 +1,6 @@
-# Sri Enippagam — React E-commerce Site
+# sri — React E-commerce Site
 
-A React conversion of the original Sri Enippagam HTML site, extended into a working
+A React conversion of the original sri HTML site, extended into a working
 storefront (browse products, cart, checkout, customer account) with an admin
 dashboard (manage products, orders, and contact enquiries). Ships with a
 Node/Express API that runs out of the box on an in-memory data store, and is
