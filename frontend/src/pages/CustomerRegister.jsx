@@ -47,12 +47,12 @@ export default function CustomerRegister() {
     <main className="customer-auth-page">
       <section className="customer-auth-card">
         <div className="customer-auth-header">
-          <span className="customer-auth-badge">Join Sri Enippagam</span>
+          <span className="customer-auth-badge">Join sri</span>
 
           <h1>Create Your Account</h1>
 
           <p>
-            Create an account to enjoy a better shopping experience with Sri
+            Create an account to enjoy a better shopping experience with sri
             Enippagam.
           </p>
         </div>

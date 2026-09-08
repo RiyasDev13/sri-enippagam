@@ -28,7 +28,7 @@ export function downloadReceipt(order) {
   const subtotal = Number(order.totalAmount) - Number(order.deliveryCharge || 0);
 
   const receipt = `<!doctype html>
-<html><head><meta charset="utf-8"><title>Sri Enippagam Receipt</title>
+<html><head><meta charset="utf-8"><title>sri Receipt</title>
 <style>
 body{font:14px Arial,sans-serif;color:#202a34;max-width:760px;margin:40px auto;padding:0 24px}
 header{display:flex;justify-content:space-between;align-items:start;border-bottom:3px solid #1977cc;padding-bottom:18px}
@@ -37,7 +37,7 @@ p{margin:6px 0;line-height:1.5}.meta{text-align:right;color:#687582}
 table{width:100%;border-collapse:collapse;margin-top:12px}th,td{padding:11px 8px;border-bottom:1px solid #dce5ec;text-align:left}th{background:#f1f7fd}
 .amount{text-align:right}.total{font-size:17px;font-weight:bold;color:#1977cc}.status{display:inline-block;padding:5px 9px;background:#e7f5eb;color:#237a3b;border-radius:4px}
 </style></head><body>
-<header><div><h1>Sri Enippagam</h1><p>Order receipt</p></div><div class="meta"><p><strong>Order #${escapeHtml(order._id)}</strong></p><p>${escapeHtml(createdAt)}</p></div></header>
+<header><div><h1>sri</h1><p>Order receipt</p></div><div class="meta"><p><strong>Order #${escapeHtml(order._id)}</strong></p><p>${escapeHtml(createdAt)}</p></div></header>
 <h2>Customer</h2><p><strong>${escapeHtml(order.customer.name)}</strong></p><p>${escapeHtml(order.customer.email)} · ${escapeHtml(order.customer.phone)}</p><p>${escapeHtml(order.customer.address)}</p>
 <h2>Payment</h2><p>${escapeHtml(paymentLabel)} · <span class="status">${escapeHtml(order.paymentStatus || "Pending")}</span></p>
 <h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${itemRows}</tbody></table>

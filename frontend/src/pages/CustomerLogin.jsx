@@ -50,7 +50,7 @@ export default function CustomerLogin() {
           <h1>Login to Your Account</h1>
 
           <p>
-            Login to continue shopping your favourite products from Sri
+            Login to continue shopping your favourite products from sri
             Enippagam.
           </p>
         </div>

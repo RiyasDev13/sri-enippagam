@@ -36,7 +36,7 @@ const replies = [
   {
     keywords: ["contact", "help", "support", "talk", "call", "email"],
     answer:
-      "We are happy to help. Call +91 94425 71648 or email srienippagam@gmail.com, or send an enquiry from Contact Us.",
+      "We are happy to help. Call +91 9842271368 or email srienippagam@gmail.com, or send an enquiry from Contact Us.",
   },
 ];
 
@@ -68,7 +68,7 @@ export default function SupportBot() {
     {
       id: 1,
       from: "bot",
-      text: "Hi! I can answer quick questions about Sri Enippagam, orders, delivery and payment.",
+      text: "Hi! I can answer quick questions about Butterscotch, orders, delivery and payment.",
     },
   ]);
 
@@ -97,7 +97,7 @@ export default function SupportBot() {
           <header className="support-bot-header">
             <span className="support-bot-avatar"><CopilotMark /></span>
             <span>
-              <strong>Sri Enippagam Help</strong>
+              <strong>Butterscotch Help</strong>
               <small>Quick answers for customers</small>
             </span>
             <button type="button" className="support-bot-close" onClick={() => setOpen(false)} aria-label="Close support chat">

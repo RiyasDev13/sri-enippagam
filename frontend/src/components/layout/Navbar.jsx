@@ -30,7 +30,7 @@ export default function Navbar() {
     <header id="header" className="site-header">
       <div className="container header-inner">
         <Link to="/" className="logo" onClick={closeMenus}>
-          Sri Enippagam
+          Butterscotch
         </Link>
 
         <nav className={`navbar ${mobileOpen ? "navbar-open" : ""}`}>
