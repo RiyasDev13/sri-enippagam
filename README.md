@@ -15,7 +15,7 @@ structured so you can drop in MongoDB whenever you're ready.
 ## Project structure
 
 ```
-sri-enippagam/
+Butterscotch/
 ├── frontend/                      React app (Vite)
 │   ├── public/
 │   │   └── logo.png
